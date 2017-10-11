@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "build": "webpack"
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack-dev-server --open"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

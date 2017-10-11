@@ -1,3 +1,4 @@
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -10,17 +11,23 @@ var expressMongoDb = require('express-mongo-db');
 var webpack = require('webpack');
 var webpackMiddleware = require("webpack-dev-middleware");
 var webpackConfig = require('./webpack.config.js');
-
+var config = require('./config');
 
 var index = require('./routes/index');
+var test = require('./routes/test');
 
 var app = express();
 
-app.use(expressMongoDb('mongodb://localhost/test'));
+app.use(expressMongoDb(config.uri));
 
-app.use(webpackMiddleware(webpack(webpackConfig), {
-	publicPath: '/dist'
-}));
+app.use('/', index);
+app.use('/test', test);
+
+if (config.expressMiddleWare) {
+	app.use(webpackMiddleware(webpack(webpackConfig), {
+		publicPath: '/dist'
+	}));
+}
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -30,7 +37,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

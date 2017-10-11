@@ -30,5 +30,12 @@ module.exports = {
     },
     plugins: [
         extractLess
-    ]
+    ],
+    devServer: {
+        contentBase: path.join(__dirname, 'public'),
+        port: 4200,
+        proxy: {
+            "/test": "http://localhost:3000"
+        }
+    }
 };
