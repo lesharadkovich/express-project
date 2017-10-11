@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var webpack = require('webpack');
 var webpackMiddleware = require("webpack-dev-middleware");
@@ -14,9 +13,13 @@ var webpackConfig = require('./webpack.config.js');
 
 var app = express();
 
+var expressMongoDb = require('express-mongo-db');
+app.use(expressMongoDb('mongodb://localhost/test'));
+
 app.use(webpackMiddleware(webpack(webpackConfig), {
 	publicPath: '/dist'
 }));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -30,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
