@@ -5,24 +5,22 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
+var expressMongoDb = require('express-mongo-db');
 
 var webpack = require('webpack');
 var webpackMiddleware = require("webpack-dev-middleware");
 var webpackConfig = require('./webpack.config.js');
 
+
+var index = require('./routes/index');
+
 var app = express();
 
-var expressMongoDb = require('express-mongo-db');
 app.use(expressMongoDb('mongodb://localhost/test'));
 
 app.use(webpackMiddleware(webpack(webpackConfig), {
 	publicPath: '/dist'
 }));
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -49,7 +47,7 @@ app.use(function (err, req, res, next) {
 
 	// render the error page
 	res.status(err.status || 500);
-	res.render('error');
+	res.send('error');
 });
 
 
